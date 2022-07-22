@@ -3,7 +3,7 @@
 
 [tool.poetry]
 name = "interactive-system-magic"
-version = "0.1.0"
+version = "0.0.0"
 description = "An IPython magic to run system commands interactively"
 authors = ["Matt Williams <matt@milliams.com>"]
 license = "MIT"
