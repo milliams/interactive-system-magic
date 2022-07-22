@@ -34,7 +34,8 @@ jobs:
       - name: Setup package
         run: poetry install
       - name: Check that the correct Python version from actions/setup-python is used by Poetry
-        run: [[ "$(poetry run python --version)" == "$(python --version)" ]]
+        run: |
+          [[ "$(poetry run python --version)" == "$(python --version)" ]]
       - name: Run linting
         run: poetry run pylama
       - name: Run mypy
