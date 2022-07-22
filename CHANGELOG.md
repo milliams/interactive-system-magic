@@ -1,3 +1,8 @@
+<!---
+SPDX-FileCopyrightText: © 2022 Matt Williams <matt@milliams.com>
+SPDX-License-Identifier: MIT
+-->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
