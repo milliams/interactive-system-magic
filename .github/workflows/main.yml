@@ -32,7 +32,7 @@ jobs:
       - name: Run linting
         run: poetry run pylama
       - name: Run mypy
-        run: poetry run mypy --install-types .
+        run: poetry run mypy --pretty --install-types --non-interactive .
       - name: Run black
         run: poetry run black --check --diff .
       - name: Run pytest
