@@ -50,6 +50,7 @@ jobs:
         run: |
           chachacha release "${{ steps.get_version.outputs.version }}"
           sed -i '/and this project adheres to/a \\n## [Unreleased]' CHANGELOG.md
+          # TODO add REUSE spec back in
           git add CHANGELOG.md
       - name: Extract changelog section
         run: |
