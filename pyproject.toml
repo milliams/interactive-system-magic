@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: © 2022 Matt Williams <matt@milliams.com>
+# SPDX-License-Identifier: MIT
+
+[tool.poetry]
+name = "interactive-system-magic"
+version = "0.1.0"
+description = "An IPython magic to run system commands interactively"
+authors = ["Matt Williams <matt@milliams.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+ipython = "^8.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+nbformat = "^5.4.0"
+nbclient = "^0.6.6"
+ipykernel = "^6.15.1"
+black = "^22.6.0"
+mypy = "^0.971"
+pylama = {extras = ["all"], version = "^8.3.8"}
+reuse = "^1.0.0"
+
+[[tool.mypy.overrides]]
+module = [
+    "IPython.core.magic",
+    "pexpect",
+    "nbformat.*",
+]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
