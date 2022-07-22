@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: © 2022 Matt Williams <matt@milliams.com>
+# SPDX-License-Identifier: MIT
+
+name: Check
+
+on: [push, pull_request, workflow_call]
+
+permissions:
+  contents: read
+
+jobs:
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install reuse
+        run: pip install reuse
+      - name: Check REUSE spec
+        run: reuse lint
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Setup package
+        run: poetry install
+      - name: Run linting
+        run: poetry run pylama
+      - name: Run mypy
+        run: poetry run mypy --pretty --install-types --non-interactive .
+      - name: Run black
+        run: poetry run black --check --diff .
+      - name: Run pytest
+        run: poetry run pytest
+      - name: Test that package builds
+        run: poetry build
