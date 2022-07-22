@@ -48,9 +48,12 @@ jobs:
         run: python -m pip install chachacha
       - name: Update changelog version
         run: |
+          head -n 5 CHANGELOG.md > header.tmp
           chachacha release "${{ steps.get_version.outputs.version }}"
           sed -i '/and this project adheres to/a \\n## [Unreleased]' CHANGELOG.md
-          # TODO add REUSE spec back in
+          cat header.tmp CHANGELOG.md > CHANGELOG.fixed.md
+          mv CHANGELOG.fixed.md CHANGELOG.md
+          rm header.tmp
           git add CHANGELOG.md
       - name: Extract changelog section
         run: |
