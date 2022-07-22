@@ -7,6 +7,11 @@ version = "0.1.0"
 description = "An IPython magic to run system commands interactively"
 authors = ["Matt Williams <matt@milliams.com>"]
 license = "MIT"
+readme = "README.rst"
+repository = "https://github.com/milliams/interactive-system-magic"
+classifiers = [
+    "Framework :: IPython"
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
