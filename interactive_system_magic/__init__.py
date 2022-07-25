@@ -14,11 +14,22 @@ from IPython.core.magic import Magics, line_cell_magic, magics_class
 
 
 def docstring(func):
-    docstr = _parser(func.__name__).format_help()
+    args_docstring = _parser(func.__name__).format_help()
+    standard_docstring = """
+        If the magic is called in cell mode then the contents of the cell are passed to the command on its stdin.
+
+        Using the interactive mode allows you to input on stdin in reaction to prompts in the program.
+    """
+
     if func.__doc__ is None:
-        func.__doc__ = docstr
+        func.__doc__ = ""
     else:
-        func.__doc__ = "\n".join([textwrap.dedent(func.__doc__), docstr])
+        func.__doc__ = textwrap.dedent(func.__doc__.strip("\n"))
+
+    func.__doc__ += "\n"
+    func.__doc__ += textwrap.dedent(standard_docstring.strip("\n"))
+    func.__doc__ += "\n"
+    func.__doc__ += textwrap.dedent(args_docstring.strip("\n"))
     return func
 
 
