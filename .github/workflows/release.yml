@@ -58,7 +58,7 @@ jobs:
       - name: Extract changelog section
         run: |
           cargo install markdown-extract
-          changelog=$(markdown-extract "${{ steps.get_version.outputs.version }}" CHANGELOG.md)
+          changelog=$(markdown-extract --no-print-matched-heading "${{ steps.get_version.outputs.version }}" CHANGELOG.md)
           echo "changelog<<EOF" >> $GITHUB_ENV
           echo "$changelog" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
