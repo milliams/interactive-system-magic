@@ -9,7 +9,7 @@ import subprocess
 import sys
 import textwrap
 import time
-from typing import Sequence
+from typing import List
 
 from IPython.core.magic import Magics, line_cell_magic, magics_class
 
@@ -49,6 +49,11 @@ def _parser(fn_name: str) -> argparse.ArgumentParser:
         action="store_true",
         help="Call the program interactively using pexpect",
     )
+    parser.add_argument(
+        "--extra-args",
+        default="",
+        help="Extra flags to pass to the command. Useful to separate flags which are needed to amke the interactivity work, and those which are important to the reader.",
+    )
     parser.add_argument("--delimiter", "-d", default="<>", help="The delimiter to use")
     if fn_name == "prog":
         prog_metavar = "PROGRAM"
@@ -68,7 +73,8 @@ def _parser(fn_name: str) -> argparse.ArgumentParser:
 
 @magics_class
 class InteractiveSystemMagics(Magics):
-    def _run(self, opts: argparse.Namespace, command: Sequence[str], cell: str = None):
+    def _run(self, opts: argparse.Namespace, command: List[str], cell: str = None):
+        command += shlex.split(opts.extra_args)
         if cell is None:
             result = subprocess.run(
                 command,

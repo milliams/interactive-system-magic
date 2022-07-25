@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added an `--extra-args` argument to pass more arguments to the command
+
 ### Fixed
 
 - Added a small sleep to fix a rare race condition in interactive mode
