@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   licenses:
+    name: License REUSE spec
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +18,8 @@ jobs:
         run: pip install reuse
       - name: Check REUSE spec
         run: reuse lint
-  unit-tests:
+  code-checks:
+    name: Tests and lints
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
