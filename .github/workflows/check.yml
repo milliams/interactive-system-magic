@@ -39,7 +39,7 @@ jobs:
         run: |
           [[ "$(poetry run python --version)" == "$(python --version)" ]]
       - name: Run linting
-        run: poetry run pylama
+        run: poetry run pylama --linters "eradicate,mccabe,pyflakes,radon,isort"
       - name: Run mypy
         run: poetry run mypy --pretty --install-types --non-interactive .
       - name: Run black
