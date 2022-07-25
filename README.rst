@@ -24,7 +24,7 @@ If you make a code cell with:
 
     %prog echo blah
 
-then it will run the program ``echo blah`` and out the result in the output:
+then it will run the program ``echo blah`` and put the result in the output:
 
 .. code-block::
 
