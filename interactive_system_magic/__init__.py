@@ -8,6 +8,7 @@ import shlex
 import subprocess
 import sys
 import textwrap
+import time
 from typing import Sequence
 
 from IPython.core.magic import Magics, line_cell_magic, magics_class
@@ -98,6 +99,7 @@ class InteractiveSystemMagics(Magics):
                     else:
                         send = line
                     p.sendline(send)
+                time.sleep(0.1)  # This is needed to prevent a rare race condition
                 p.sendeof()
                 p.expect(pexpect.EOF)
                 p.wait()

@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Added a small sleep to fix a rare race condition in interactive mode
+
 ## [0.1.0] - 2022-07-22
 
 ### Added
