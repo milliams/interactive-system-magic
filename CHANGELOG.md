@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added an `--extra-args` argument to pass more arguments to the command
+- The stdout, return code and run command are now returned as a `Result` object
+
+### Removed
+
+- The `--return` flag was removed as it's now always returned through the `Result` object.
 
 ### Fixed
 

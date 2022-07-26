@@ -22,6 +22,16 @@ def execute(nb):
     return executed
 
 
+def get_execute_result(cell):
+    return next(
+        o for o in cell.get("outputs", []) if o.get("output_type") == "execute_result"
+    )
+
+
+def get_text_output(cell):
+    return get_execute_result(cell)["data"]["text/plain"]
+
+
 def test_load_ext(loaded_nb):
     execute(loaded_nb)
 
@@ -31,7 +41,7 @@ def test_simple_prog(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert executed.cells[1]["outputs"][0]["text"] == "blah\n"
+    assert get_text_output(executed.cells[1]) == "blah"
 
 
 def test_prog_args(loaded_nb):
@@ -39,7 +49,7 @@ def test_prog_args(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert "Python" in executed.cells[1]["outputs"][0]["text"]
+    assert "Python" in get_text_output(executed.cells[1])
 
 
 def test_cat_input(loaded_nb):
@@ -47,7 +57,7 @@ def test_cat_input(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert executed.cells[1]["outputs"][0]["text"] == "a thing\n"
+    assert get_text_output(executed.cells[1]) == "a thing"
 
 
 def test_bc_input(loaded_nb):
@@ -55,7 +65,7 @@ def test_bc_input(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert executed.cells[1]["outputs"][0]["text"] == "2\n"
+    assert get_text_output(executed.cells[1]) == "2"
 
 
 def test_bc_input_interactive(loaded_nb):
@@ -63,7 +73,7 @@ def test_bc_input_interactive(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert executed.cells[1]["outputs"][0]["text"] == "1+1\r\n2\r\n"
+    assert get_text_output(executed.cells[1]) == "1+1\n2"
 
 
 def test_cat_input_interactive(loaded_nb):
@@ -78,7 +88,7 @@ def test_cat_input_interactive(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert executed.cells[1]["outputs"][0]["text"] == "a thing\r\na thing\r\n"
+    assert get_text_output(executed.cells[1]) == "a thing\na thing"
 
 
 def test_python_prompt(loaded_nb):
@@ -93,8 +103,8 @@ def test_python_prompt(loaded_nb):
 
     executed = execute(loaded_nb)
 
-    assert ">>> print(5743+7473)" in executed.cells[1]["outputs"][0]["text"]
-    assert "13216" in executed.cells[1]["outputs"][0]["text"]
+    assert ">>> print(5743+7473)" in get_text_output(executed.cells[1])
+    assert "13216" in get_text_output(executed.cells[1])
 
 
 def test_run_python_script(loaded_nb, tmp_path):
@@ -113,7 +123,7 @@ def test_run_python_script(loaded_nb, tmp_path):
 
     executed = execute(loaded_nb)
 
-    assert executed.cells[2]["outputs"][0]["text"] == f"['{script}', 'fgf']\n"
+    assert get_text_output(executed.cells[2]) == f"['{script}', 'fgf']"
 
 
 def test_run_python_script_input(loaded_nb, tmp_path):
@@ -139,6 +149,4 @@ def test_run_python_script_input(loaded_nb, tmp_path):
 
     executed = execute(loaded_nb)
 
-    assert (
-        executed.cells[2]["outputs"][0]["text"] == "Enter name: Matt\r\nHello Matt\r\n"
-    )
+    assert get_text_output(executed.cells[2]) == "Enter name: Matt\nHello Matt"

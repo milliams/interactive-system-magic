@@ -9,6 +9,7 @@ import subprocess
 import sys
 import textwrap
 import time
+from dataclasses import dataclass
 from typing import List
 
 from IPython.core.magic import Magics, line_cell_magic, magics_class
@@ -37,13 +38,6 @@ def docstring(func):
 def _parser(fn_name: str) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False, prog=f"%{fn_name}")
     parser.add_argument(
-        "--return",
-        "-r",
-        dest="do_return",
-        action="store_true",
-        help="Output the return code",
-    )
-    parser.add_argument(
         "--interactive",
         "-i",
         action="store_true",
@@ -71,9 +65,33 @@ def _parser(fn_name: str) -> argparse.ArgumentParser:
     return parser
 
 
+@dataclass
+class Result:
+    """
+    The results and input to the system call
+    """
+
+    stdout: str
+    returncode: int
+    command: List[str]
+
+    def __repr__(self):
+        return self.stdout
+
+    def _repr_mimebundle_(self, include=None, exclude=None):
+        return {}, {
+            "text/x.prog": {
+                "command": shlex.join(self.command),
+                "returncode": self.returncode,
+            }
+        }
+
+
 @magics_class
 class InteractiveSystemMagics(Magics):
-    def _run(self, opts: argparse.Namespace, command: List[str], cell: str = None):
+    def _run(
+        self, opts: argparse.Namespace, command: List[str], cell: str = None
+    ) -> Result:
         command += shlex.split(opts.extra_args)
         if cell is None:
             result = subprocess.run(
@@ -84,9 +102,7 @@ class InteractiveSystemMagics(Magics):
                 text=True,
                 check=False,
             )
-            print(result.stdout, end="")
-            if opts.do_return:
-                return result.returncode
+            return Result(result.stdout, result.returncode, command)
         else:
             if opts.interactive:
                 import pexpect
@@ -108,9 +124,9 @@ class InteractiveSystemMagics(Magics):
                 time.sleep(0.1)  # This is needed to prevent a rare race condition
                 p.sendeof()
                 p.expect(pexpect.EOF)
-                p.wait()
+                returncode = p.wait()
                 output.seek(0)
-                print(output.read(), end="")
+                return Result(output.read(), returncode, command)
             else:
                 result = subprocess.run(
                     command,
@@ -120,14 +136,11 @@ class InteractiveSystemMagics(Magics):
                     text=True,
                     check=False,
                 )
-                print(result.stdout, end="")
-                if opts.do_return:
-                    return result.returncode
-            return None
+                return Result(result.stdout, result.returncode, command)
 
     @line_cell_magic
     @docstring
-    def prog(self, line: str, cell: str = None):
+    def prog(self, line: str, cell: str = None) -> Result:
         """
         Run a program on the command line.
         """
@@ -136,7 +149,7 @@ class InteractiveSystemMagics(Magics):
 
     @line_cell_magic
     @docstring
-    def run_python_script(self, line: str, cell: str = None):
+    def run_python_script(self, line: str, cell: str = None) -> Result:
         """
         Run a Python script on the command line.
 
