@@ -32,6 +32,10 @@ def get_text_output(cell):
     return get_execute_result(cell)["data"]["text/plain"]
 
 
+def get_metadata(cell):
+    return get_execute_result(cell)["metadata"]["text/x.prog"]
+
+
 def test_load_ext(loaded_nb):
     execute(loaded_nb)
 
@@ -42,6 +46,7 @@ def test_simple_prog(loaded_nb):
     executed = execute(loaded_nb)
 
     assert get_text_output(executed.cells[1]) == "blah"
+    assert get_metadata(executed.cells[1])["returncode"] == 0
 
 
 def test_prog_args(loaded_nb):
