@@ -65,6 +65,15 @@ def test_cat_input(loaded_nb):
     assert get_text_output(executed.cells[1]) == "a thing"
 
 
+def test_extra_args(loaded_nb):
+    loaded_nb.cells.append(new_code_cell("%%prog --extra-args='--help' bc\n1+1"))
+
+    executed = execute(loaded_nb)
+
+    assert "usage" in get_text_output(executed.cells[1])
+    assert get_metadata(executed.cells[1])["command"] == "bc"
+
+
 def test_bc_input(loaded_nb):
     loaded_nb.cells.append(new_code_cell("%%prog bc --quiet\n1+1"))
 

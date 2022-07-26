@@ -92,10 +92,10 @@ class InteractiveSystemMagics(Magics):
     def _run(
         self, opts: argparse.Namespace, command: List[str], cell: str = None
     ) -> Result:
-        command += shlex.split(opts.extra_args)
+        full_command = command + shlex.split(opts.extra_args)
         if cell is None:
             result = subprocess.run(
-                command,
+                full_command,
                 input=None,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
@@ -109,7 +109,7 @@ class InteractiveSystemMagics(Magics):
 
                 d_start = re.escape(opts.delimiter[0])
                 d_end = re.escape(opts.delimiter[1])
-                p = pexpect.spawn(shlex.join(command), encoding="utf-8")
+                p = pexpect.spawn(shlex.join(full_command), encoding="utf-8")
                 output = io.StringIO()
                 p.logfile_read = output
                 for line in cell.strip().split("\n"):
@@ -129,7 +129,7 @@ class InteractiveSystemMagics(Magics):
                 return Result(output.read(), returncode, command)
             else:
                 result = subprocess.run(
-                    command,
+                    full_command,
                     input=cell,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
