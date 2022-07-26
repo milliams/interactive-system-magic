@@ -112,6 +112,55 @@ def test_python_prompt(loaded_nb):
     assert "13216" in get_text_output(executed.cells[1])
 
 
+def test_ipython_prompt(loaded_nb):
+    loaded_nb.cells.append(
+        new_code_cell(
+            """
+            %%prog ipython --colors=NoColor --no-confirm-exit --no-banner --simple-prompt
+            5743+7473
+            """
+        )
+    )
+
+    executed = execute(loaded_nb)
+
+    assert "13216" in get_text_output(executed.cells[1])
+
+
+def test_ipython_prompt_interactive(loaded_nb):
+    loaded_nb.cells.append(
+        new_code_cell(
+            r"""
+            %%prog -i -d <> ipython --colors=NoColor --no-confirm-exit --no-banner --simple-prompt
+            <In \[\d]: >a = 5743
+            <In \[\d]: >b = 7473
+            <In \[\d]: >a + b
+            """
+        )
+    )
+
+    executed = execute(loaded_nb)
+
+    assert "13216" in get_text_output(executed.cells[1])
+
+
+def test_ipython_prompt_interactive_extra_args(loaded_nb):
+    loaded_nb.cells.append(
+        new_code_cell(
+            r"""
+            %%prog -i -d <> --extra-args="--colors=NoColor --no-confirm-exit --no-banner --simple-prompt" ipython
+            <In \[\d]: >a = 5743
+            <In \[\d]: >b = 7473
+            <In \[\d]: >a + b
+            """
+        )
+    )
+
+    executed = execute(loaded_nb)
+
+    assert "13216" in get_text_output(executed.cells[1])
+
+
 def test_run_python_script(loaded_nb, tmp_path):
     script = tmp_path / "a.py"
     loaded_nb.cells.append(
