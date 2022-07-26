@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Added a small sleep to fix a rare race condition in interactive mode
+- Added `pexpect` to the package dependencies
 
 ## [0.1.0] - 2022-07-22
 

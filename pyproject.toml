@@ -16,6 +16,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 ipython = "^8.4.0"
+pexpect = "^4.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
