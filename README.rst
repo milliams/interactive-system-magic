@@ -97,7 +97,7 @@ you can call it with:
 
 and get:
 
-..code-block::
+.. code-block::
 
     This is a script
 
