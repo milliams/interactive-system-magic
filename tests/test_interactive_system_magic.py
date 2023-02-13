@@ -86,8 +86,11 @@ def test_bc_input_interactive(loaded_nb):
     loaded_nb.cells.append(new_code_cell("%%prog -i bc --quiet\n1+1"))
 
     executed = execute(loaded_nb)
+    output = get_text_output(executed.cells[1])
+    output = output.replace("\x1b[?2004h", "")
+    output = output.replace("\x1b[?2004l\n", "")
 
-    assert get_text_output(executed.cells[1]) == "1+1\n2"
+    assert output.strip() == "1+1\n2"
 
 
 def test_cat_input_interactive(loaded_nb):
