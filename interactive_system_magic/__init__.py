@@ -10,7 +10,7 @@ import sys
 import textwrap
 import time
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from IPython.core.magic import Magics, line_cell_magic, magics_class
 
@@ -90,7 +90,7 @@ class Result:
 @magics_class
 class InteractiveSystemMagics(Magics):
     def _run(
-        self, opts: argparse.Namespace, command: List[str], cell: str = None
+        self, opts: argparse.Namespace, command: List[str], cell: Optional[str] = None
     ) -> Result:
         full_command = command + shlex.split(opts.extra_args)
         if cell is None:
@@ -140,7 +140,7 @@ class InteractiveSystemMagics(Magics):
 
     @line_cell_magic
     @docstring
-    def prog(self, line: str, cell: str = None) -> Result:
+    def prog(self, line: str, cell: Optional[str] = None) -> Result:
         """
         Run a program on the command line.
         """
@@ -149,7 +149,7 @@ class InteractiveSystemMagics(Magics):
 
     @line_cell_magic
     @docstring
-    def run_python_script(self, line: str, cell: str = None) -> Result:
+    def run_python_script(self, line: str, cell: Optional[str] = None) -> Result:
         """
         Run a Python script on the command line.
 
