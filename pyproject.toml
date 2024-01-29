@@ -23,7 +23,7 @@ pytest = "^8.0.0"
 nbformat = "^5.4.0"
 nbclient = "^0.9.0"
 ipykernel = "^6.15.1"
-black = "^23.1.0"
+black = "^24.1.1"
 mypy = "^1.0"
 pylama = {extras = ["all"], version = "^8.3.8"}
 reuse = "^3.0.1"
